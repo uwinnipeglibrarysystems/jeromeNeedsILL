@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# SECRET_KEY does not go in revision control
+jeromeneedsill/secretkey.py
