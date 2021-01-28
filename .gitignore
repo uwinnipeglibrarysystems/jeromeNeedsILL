@@ -130,3 +130,6 @@ dmypy.json
 
 # SECRET_KEY does not go in revision control
 jeromeneedsill/secretkey.py
+
+# emacs backup files
+*~
