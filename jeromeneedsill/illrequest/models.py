@@ -106,5 +106,5 @@ class openurlrequest(models.Model):
 
     class Meta:
         indexes=[
-            models.Index(fields=['request', 'key'])
+            models.Index(fields=['request', 'key'])]
             
