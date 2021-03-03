@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('linkresolver',
          include('jeromeneedsill.illrequest.openurl_linkresolver_urls') ),
+    path('ill', include('jeromeneedsill.illrequest.ill_urls') ),
 ]

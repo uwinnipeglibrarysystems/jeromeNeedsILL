@@ -125,3 +125,23 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 128807 is the OCLC test institution
+# production installations should have a different DJANGO_SETTINGS_MODULE
+# with their own institution id specified at the end of ILLREQUEST_OATH_URL
+ILLREQUEST_OATH_URL = 'https://oauth.oclc.org/auth/128807'
+
+# you need to establish sitesettings.py as a file not in revision control
+# and include ILLREQUEST_OCLC_SCIM_CLIENT_ID
+# which publically identifies your OCLC API key for SCIM
+#
+# and optionally add ILLREQUEST_POST_OAUTH_REDIRECT_URI
+# to request a specific uri for handling the user
+# after they pass oauth vs the default tied to the api key CLIENT_ID
+# ILLREQUEST_POST_OAUTH_REDIRECT_URI = ''
+#
+# doing a * import so ILLREQUEST_POST_OAUTH_REDIRECT_URI can be absent
+# entirely
+#
+# also an opportunity to optionally override ILLREQUEST_OATH_URL
+from .sitesettings import *
