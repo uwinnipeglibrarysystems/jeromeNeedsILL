@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from django.db import models
 
 # Create your models here.
@@ -98,9 +100,14 @@ class illrequest(models.Model):
     electronicdelivery_messagingaddress = models.CharField(
         max_length=255, blank=True)
 
+class illrequestbase(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    date_created = models.DateTimeField(
+        auto_now_add=True, blank=False)
+    
 class openurlrequest(models.Model):
-    request = models.ForeignKey(illrequest, on_delete=models.CASCADE,
-                                blank=False, db_index=False)
+    request = models.ForeignKey(illrequestbase, on_delete=models.CASCADE,
+                                blank=True, db_index=False)
     key = models.CharField(max_length=255, blank=False)
     value = models.CharField(max_length=255, blank=False)
 
