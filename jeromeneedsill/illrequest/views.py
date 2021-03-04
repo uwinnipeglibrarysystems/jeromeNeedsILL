@@ -2,7 +2,7 @@ from sys import stderr
 
 from django.shortcuts import render
 
-from .models import illrequest, illrequestbase, openurlrequest
+from .models import illrequestbase, openurlrequest
 
 # Create your views here.
 def openurl_linkresolver(request):
