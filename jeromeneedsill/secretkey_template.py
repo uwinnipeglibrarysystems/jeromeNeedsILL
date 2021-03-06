@@ -16,4 +16,4 @@ SECRET_KEY='django-insecure'
 
 if __name__ == "__main__":
     from django.core.management.utils import get_random_secret_key
-    print("SECRET_KEY='django-insecure" + get_random_secret_key())
+    print("SECRET_KEY='django-insecure" + get_random_secret_key() + "'")
