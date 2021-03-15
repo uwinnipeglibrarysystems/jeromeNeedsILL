@@ -8,6 +8,13 @@ class illrequestbase(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     date_created = models.DateTimeField(
         auto_now_add=True, blank=False)
+
+class illmanualrequester(models.Model):
+    request = models.ForeignKey(illrequestbase, on_delete=models.CASCADE,
+                                blank=False, db_index=True)
+    requester_name = models.CharField(max_length=255, blank=False)
+    email = models.CharField(max_length=255, blank=False)
+    barcode = models.CharField(max_length=255, blank=False)
     
 class openurlrequest(models.Model):
     request = models.ForeignKey(illrequestbase, on_delete=models.CASCADE,

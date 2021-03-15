@@ -6,6 +6,8 @@ from django.conf import settings
 
 from .models import illrequestbase, openurlrequest
 
+from .postoauth import post_oauth
+
 # FIXME this should really be loaded from a configurable django app, so other
 # OAuth apis can be used other than oclc
 #

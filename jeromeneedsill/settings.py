@@ -128,20 +128,34 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 128807 is the OCLC test institution
 # production installations should have a different DJANGO_SETTINGS_MODULE
-# with their own institution id specified at the end of ILLREQUEST_OATH_URL
-ILLREQUEST_OATH_URL = 'https://oauth.oclc.org/auth/128807'
+# with their own institution id specified
+# or for development override in sitesettings.py which we import below
+ILLREQUEST_INSTITUTION_ID = 128807
+
+ILLREQUEST_TOKEN_REQUEST_URL = \
+    'https://authn.sd00.worldcat.org/oauth2/accessToken'
 
 # you need to establish sitesettings.py as a file not in revision control
 # and include ILLREQUEST_OCLC_SCIM_CLIENT_ID
 # which publically identifies your OCLC API key for SCIM
+#
+# and ILLREQUEST_OCLC_SCIM_SECRET, which you should load from web server
+# environment in production and not have in a file readable by this web app
 #
 # and optionally add ILLREQUEST_POST_OAUTH_REDIRECT_URI
 # to request a specific uri for handling the user
 # after they pass oauth vs the default tied to the api key CLIENT_ID
 # ILLREQUEST_POST_OAUTH_REDIRECT_URI = ''
 #
+# also an opportunity to optionally override ILLREQUEST_OATH_URL
+# and ILLREQUEST_INSTITUTION_ID
+#
 # doing a * import so ILLREQUEST_POST_OAUTH_REDIRECT_URI can be absent
 # entirely
-#
-# also an opportunity to optionally override ILLREQUEST_OATH_URL
 from .sitesettings import *
+
+ILLREQUEST_OATH_URL = \
+    'https://oauth.oclc.org/auth/%d' % ILLREQUEST_INSTITUTION_ID
+ILLREQUEST_OCLC_WMS_SCIM_ME_ENDPOINT = (
+    'https://%d.share.worldcat.org/idaas/scim/v2/Me' %
+    ILLREQUEST_INSTITUTION_ID)
