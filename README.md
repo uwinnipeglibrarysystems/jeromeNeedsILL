@@ -1,3 +1,23 @@
+Jerome is considered the patron saint of librarians.
+https://en.wikipedia.org/wiki/Jerome
+https://www.luther.edu/library/about/history/40th/jerome/
+
+Perhaps he would have valued interlibrary loans as we do.
+
+This is a web application which:
+ 1) Captures an incoming OpenURL request representing an ILL request to a database
+ 2) Asks the user if they would like to place an ill request
+ 3) Authenticates the user against OCLC OAuth api
+ 4) Fetches a user profile with OCLC SCIM /Me API and stores name, email and barcode in the database connected to the ILL request
+
+Code here was developed by staff of the systems team at the University of Winnipeg Library. Free software licensing is pending.
+
+This application is in early release. It's not even in production yet at the University of Winnipeg where it was developed. Minimal viable product status was only achieved in March 2021.
+
+Releases will be tagged.
+
+Planned is support for Relais APIs so that user profiles and ILL requests can land there for direct handling by ILL staff and only pass through this Django web app.
+
 This project code uses Django (djangoproject.com), 3.2 series, currently in beta, but slated to be the next long term support (LTS) release.
 
 The Django docs (https://docs.djangoproject.com/en/3.2/) cover what is involved in running a Django project.
