@@ -14,6 +14,8 @@ Code here was developed by staff of the systems team at the University of Winnip
 
 This application is in early release. It's not even in production yet at the University of Winnipeg where it was developed. Minimal viable product status was only achieved in March 2021.
 
+Note that production deployment instructions are not included at this time. Like all Django apps, if you are going to deploy to production, cryptographic secrets should not be found in source code files and should be passed on to settings.py by way of environment variables that the production web server passes on.
+
 Releases will be tagged.
 
 Planned is support for Relais APIs so that user profiles and ILL requests can land there for direct handling by ILL staff and only pass through this Django web app.
