@@ -1,4 +1,4 @@
-This project code uses Django (djangoproject.com), 3.2 series, currently in alpha, but slated to be the next long term support (LTS) release.
+This project code uses Django (djangoproject.com), 3.2 series, currently in beta, but slated to be the next long term support (LTS) release.
 
 The Django docs (https://docs.djangoproject.com/en/3.2/) cover what is involved in running a Django project.
 
