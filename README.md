@@ -1,4 +1,5 @@
 Jerome is considered the patron saint of librarians.
+
 https://en.wikipedia.org/wiki/Jerome
 https://www.luther.edu/library/about/history/40th/jerome/
 
@@ -37,8 +38,10 @@ Note, in deployment ILLREQUEST_OCLC_SCIM_SECRET should not be in a file at all b
 
 Don't commit secretkey.py and to revision control or sitesettings.py if it contains ILLREQUEST_OCLC_SCIM_SECRET .
 
-$ python ./manage.py migrate
+`$ python ./manage.py migrate`
+
 will initialize your development database (sqllite)
 
-# python ./manage.py runserver
+`$ python ./manage.py runserver`
+
 runs a development web server.
