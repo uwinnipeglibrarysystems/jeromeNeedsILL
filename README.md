@@ -18,7 +18,7 @@ Note that production deployment instructions are not included at this time. Like
 
 Releases will be tagged.
 
-Planned is support for Relais APIs so that user profiles and ILL requests can land there for direct handling by ILL staff and only pass through this Django web app.
+Planned as soon as possible, support for Relais APIs so that user profiles and ILL requests can land there for direct handling by ILL staff and only pass through this Django web app.
 
 This project code uses Django (djangoproject.com), 3.2 series, currently in beta, but slated to be the next long term support (LTS) release.
 
