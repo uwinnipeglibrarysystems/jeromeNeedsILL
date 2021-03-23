@@ -1,2 +1,2 @@
-Django==3.2a1
+Django==3.2rc1
 requests>=2.25.1
