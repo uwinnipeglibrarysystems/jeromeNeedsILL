@@ -9,3 +9,9 @@
 </ul>
 
 <p>The request paramaters were:</p>
+
+<table border="1">
+  {% for param in params %}
+  <tr><td>{{ param.key }}</td><td>{{ param.value }}</td></tr>
+  {% endfor %}
+</table>

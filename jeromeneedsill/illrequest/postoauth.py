@@ -56,6 +56,10 @@ def post_oauth(request):
             barcode=patron_profile['barcode'] )
         requester.save()
 
+        params = openurlrequest.objects.filter(request=illrbase)
+
         return render(
             request, 'ill_success_with_patron_details.html',
-            {'patron_profile': patron_profile} )
+            {'patron_profile': patron_profile,
+             'params': params,
+            } )
