@@ -3,6 +3,7 @@ from urllib.parse import urlencode
 
 from django.shortcuts import render, redirect
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import illrequestbase, openurlrequest
 
@@ -42,6 +43,7 @@ def construct_oclc_oauth_url(state=None, redirect_uri=None):
 
 # Create your views here.
 
+@csrf_exempt
 def openurl_linkresolver(request):
     if request.method == 'POST':
         params = request.POST
