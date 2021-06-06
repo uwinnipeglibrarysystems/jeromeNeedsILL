@@ -30,7 +30,7 @@ To run this code for development, you'll need a python environment like a virtua
 One dependency of this project is not availble through requirements.txt, pip and PyPY (Python Package Index). This is https://github.com/uwinnipeglibrarysystems/oclchmac .  You'll need to make that available for this Django app manually by ensuring the oclcwskeyhmacsig.util and oclcwskeyhmacsig.hmacsig libraries are available in the python path.
 
 The Django settings file jeromeneedsill/settings.py imports a development SECRET_KEY from jeromeneedsill/secretkey.py, so you'll have to create that file. jeromeneedsill/secretkey_template.py includes an example or can be run
-$ python jeromeneedsill/secretkey_template.py > jeromeneedsill/secretkey.py
+$ python3 jeromeneedsill/secretkey_template.py > jeromeneedsill/secretkey.py
 
 You'll also need an OCLC SCIM API key with access to the /Me endpoint and circulation info. Establish a jeromeneedsill/sitesettings.py file with at least ILLREQUEST_OCLC_SCIM_CLIENT_ID and ILLREQUEST_OCLC_SCIM_SECRET if you are using a development API key that uses the OCLC test institution and define ILLREQUEST_INSTITUTION_ID as well if you are using a production API key with your institution.
 
@@ -38,10 +38,10 @@ Note, in deployment ILLREQUEST_OCLC_SCIM_SECRET should not be in a file at all b
 
 Don't commit secretkey.py and to revision control or sitesettings.py if it contains ILLREQUEST_OCLC_SCIM_SECRET .
 
-`$ python ./manage.py migrate`
+`$ ./manage.py migrate`
 
 will initialize your development database (sqllite)
 
-`$ python ./manage.py runserver`
+`$ ./manage.py runserver`
 
 runs a development web server.
