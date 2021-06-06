@@ -21,7 +21,7 @@ Releases will be tagged.
 
 Planned as soon as possible, support for Relais APIs so that user profiles and ILL requests can land there for direct handling by ILL staff and only pass through this Django web app.
 
-This project code uses Django (djangoproject.com), 3.2 series, currently in beta, but slated to be the next long term support (LTS) release.
+This project code uses Django (djangoproject.com), 3.2 series, the current long term support (LTS) release.
 
 The Django docs (https://docs.djangoproject.com/en/3.2/) cover what is involved in running a Django project.
 
