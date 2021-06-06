@@ -13,7 +13,7 @@ This is a web application which:
 
 Code here was developed by staff of the systems team at the University of Winnipeg Library. Free software licensing is pending.
 
-This application is in early release. It's not even in production yet at the University of Winnipeg where it was developed. Minimal viable product status was only achieved in March 2021.
+This application is in early release. It's not even in production yet at the University of Winnipeg where it was developed. Minimal viable product status was only achieved in March 2021 (tag mvp0.1).
 
 Note that production deployment instructions are not included at this time. Like all Django apps, if you are going to deploy to production, cryptographic secrets should not be found in source code files and should be passed on to settings.py by way of environment variables that the production web server passes on.
 
@@ -25,7 +25,12 @@ This project code uses Django (djangoproject.com), 3.2 series, the current long 
 
 The Django docs (https://docs.djangoproject.com/en/3.2/) cover what is involved in running a Django project.
 
-To run this code for development, you'll need a python environment like a virtualenv with Django 3.2 (and other dependencies). Django 3.2 and its dependencies are in requirments.txt (output of pip freeze).
+To run this code for development, you'll need Python 3.6 or later, a Django 3.2.x installation, python-requests (http://python-requests.org) and their dependencies.
+
+You may find it convient to use the python venv (https://docs.python.org/3/library/venv.html) to contain these dependencies instead of installing them system wide. A venv will also typically include the pip3 too.
+
+Django 3.2 and python-requests are specified in the requirements.txt file. You can install both of those requirements and their dependencies with
+$ pip3 install -r requirements.txt
 
 One dependency of this project is not availble through requirements.txt, pip and PyPY (Python Package Index). This is https://github.com/uwinnipeglibrarysystems/oclchmac .  You'll need to make that available for this Django app manually by ensuring the oclcwskeyhmacsig.util and oclcwskeyhmacsig.hmacsig libraries are available in the python path.
 
