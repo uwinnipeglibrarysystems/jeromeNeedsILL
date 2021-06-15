@@ -16,9 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from .illrequest.nciplookupuser import ncip_lookup_user
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('linkresolver/',
          include('jeromeneedsill.illrequest.openurl_linkresolver_urls') ),
     path('ill/', include('jeromeneedsill.illrequest.ill_urls') ),
+
+    # NOTE, this path should be protected and only made available to
+    # a Relais ILL server
+    path('nciplookupuser/', ncip_lookup_user),
 ]
