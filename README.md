@@ -19,7 +19,7 @@ Note that production deployment instructions are not included at this time. Like
 
 Releases will be tagged.
 
-Planned as soon as possible, support for Relais APIs so that user profiles and ILL requests can land there for direct handling by ILL staff and only pass through this Django web app.
+Planned as soon as possible, support for Relais APIs so that user profiles and ILL requests can land there for direct handling by ILL staff and only pass through this Django web app. The codebase mainline contains some initial work in progress for the NCIP Lookup User operation, but this support is not yet useful or integrated with the workflow of the rest of the application.
 
 This project code uses Django (djangoproject.com), 3.2 series, the current long term support (LTS) release.
 
