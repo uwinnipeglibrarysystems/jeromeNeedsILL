@@ -4,6 +4,14 @@
 
 <ul>
   <li>Name: {{ patron_profile.name  }}</li>
+  {% if patron_profile.givenName %}
+  <li>Given name: {{ patron_profile.givenName }}</li>
+  {% endif %}
+
+  {% if patron_profile.familyName %}
+  <li>Family name: {{ patron_profile.familyName }}</li>
+  {% endif %}
+
   <li>Email: {{ patron_profile.email }}</li>
   <li>Barcode: {{ patron_profile.barcode }}</li>
 </ul>

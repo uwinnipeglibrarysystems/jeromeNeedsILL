@@ -79,9 +79,14 @@ def get_oclc_wms_simplified_patron_profile(access_token):
               else ' ' + me_response['name']['familyName'] )
     name = name.strip()
 
-    return {
+    response_dict = {
         'name': name,
         'email': me_response['email'],
         'barcode':
         me_response[CIRCULATION_INFO_FIELD]['circulationInfo']['barcode']
     }
+    response_dict.update( { k: v
+                            for k,v in me_response['name'].items()
+                            if k=='givenName' or k=='familyName' } )
+
+    return response_dict
