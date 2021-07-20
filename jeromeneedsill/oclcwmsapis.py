@@ -83,7 +83,9 @@ def get_oclc_wms_simplified_patron_profile(access_token):
         'name': name,
         'email': me_response['email'],
         'barcode':
-        me_response[CIRCULATION_INFO_FIELD]['circulationInfo']['barcode']
+        me_response[CIRCULATION_INFO_FIELD]['circulationInfo']['barcode'],
+        'borrowerCategory': me_response[CIRCULATION_INFO_FIELD][
+            'circulationInfo']['borrowerCategory'],
     }
     response_dict.update( { k: v
                             for k,v in me_response['name'].items()
