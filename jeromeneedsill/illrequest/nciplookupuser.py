@@ -83,7 +83,7 @@ def ncip_lookup_user(request):
             privilege_profile="Student",
             )
 
-    elif user_ident == TEST_USER_IDENT:
+    elif settings.DEBUG and user_ident == TEST_USER_IDENT:
         return http_lookup_user_response_w_settings(
             privilege_profile="Student",
             user_identifier=user_ident,
