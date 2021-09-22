@@ -70,6 +70,14 @@ def ncip_lookup_user(request):
 
     patron_profile = cache.get(user_ident)
     if patron_profile!=None: # if we found a UUID identified profile in cache
+        # use a mapping configuration of OCLC borrowerCategory to
+        # privilege_profile for the NCIP response, or fallback on a default
+        # value settings.NCIP_LOOKUP_USER_DEFAULT_PRIVILEGE_PROFILE
+        # if no catagory maps
+        privilege_profile = \
+            settings.NCIP_LOOKUP_USER_BORROWER_CAT_TO_PRIVILEGE_PROFILE_MAP.\
+            get(patron_profile['borrowerCategory'],
+                settings.NCIP_LOOKUP_USER_DEFAULT_PRIVILEGE_PROFILE)
         return http_lookup_user_response_w_settings(
             user_identifier=patron_profile['barcode'],
             barcode=patron_profile['barcode'],
@@ -80,7 +88,7 @@ def ncip_lookup_user(request):
             # FIXME, the privilege_profile should be be based on aspects of
             # patron type in the WMS response and probably the type mapping
             # should be defined in the django settings configuration
-            privilege_profile="Student",
+            privilege_profile=privilege_profile,
             )
 
     elif settings.DEBUG and user_ident == TEST_USER_IDENT:
