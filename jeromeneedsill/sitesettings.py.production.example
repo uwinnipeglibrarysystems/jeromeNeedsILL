@@ -1,0 +1,91 @@
+import os
+
+DEBUG = False
+
+ALLOWED_HOSTS = ['ill.someuniversitylibrary.edu']
+
+STATIC_ROOT='/srv/illjerome/staticfiles/'
+
+
+if DEBUG:
+    import logging
+    for key in ('DJANGO_SECRET_MYSQL_PASSWORD',
+                'ILLREQUEST_OCLC_SCIM_SECRET',
+                'RELAIS_AUTH_API_KEY_SECRET',
+                ):
+        if key not in os.environ:
+            logging.error(key + ' absent')
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'illjerome',
+        'USER': 'illjerome',
+        'HOST': '127.0.0.1',
+        # even if DJANGO_SECRET_MYSQL_PASSWORD is not defined
+        # we set it to a useless value because some ./manage.py commands
+        # may still work
+        'PASSWORD': os.environ.get('DJANGO_SECRET_MYSQL_PASSWORD',
+                                   'notuseful'),
+    }
+}
+
+# retrieve these are 'noteuseful' as there may be ./manage.py scenarioes
+# where we don't need these set
+ILLREQUEST_OCLC_SCIM_SECRET = \
+    os.environ.get('ILLREQUEST_OCLC_SCIM_SECRET', 'notuseful')
+RELAIS_AUTH_API_KEY = \
+    os.environ.get('RELAIS_AUTH_API_KEY_SECRET', 'notuseful')
+
+ILLREQUEST_INSTITUTION_ID = 128807
+
+ILLREQUEST_OCLC_SCIM_CLIENT_ID='FFFFILLME'
+
+# optional
+# ILLREQUEST_POST_OAUTH_REDIRECT_URI = ''
+
+ILLREQUEST_OCLC_SCIM_SECRET = 'blahblah'
+
+NCIP_LOOKUP_USER_AGENCY = "SYMB"
+NCIP_LOOKUP_USER_LANGUAGE = "en"
+NCIP_LOOKUP_USER_PRIVILEGE_AGENCY_ID = "University of Blah"
+NCIP_LOOKUP_USER_PRIVILEGE_AUPT_SCHEME = \
+    "University of Blah User Privilege Type Academic Scheme"
+NCIP_LOOKUP_USER_PRIVILEGE_UPST_SCHEME = \
+    "University of Blah User Privilege Type Status Type Scheme"
+NCIP_LOOKUP_USER_PRIMARY_KEY_IDENTIFIER_TYPE_SCHEME = \
+    "University of Blah User Identifier Type Scheme"
+
+NCIP_LOOKUP_USER_DEFAULT_PRIVILEGE_PROFILE = "Student"
+NCIP_LOOKUP_USER_BORROWER_CAT_TO_PRIVILEGE_PROFILE_MAP = {}
+
+RELAIS_REFER_PROFILE_AND_REQUEST_TO_RELAIS = True
+RELAIS_REQUEST_RELAIS_AID_W_CACHED_PROFILE_UUID = True
+RELAIS_REQUEST_RELAID_AID_W_BARCODE = False
+RELAIS_PORTAL_HOST = 'symb.relais-host.com'
+RELAIS_PORTAL_BASE_URL = 'https://' + RELAIS_PORTAL_HOST
+RELAIS_SYMBOL = 'SYMB'
+RELAIS_AUTH_API_KEY = 'BLAHBLAH'
+RELAIS_PARTNERSHIP_OVERRIDE = 'SYMB'
+
+#RELAIS_DEBUG_PROFILE_ID_OVERRIDE = '12345678'
+#RELAIS_DEBUG_PATRON_IP_OVERRIDE = '1.1.1.1'
+#RELAIS_DEBUG_PATRON_USER_AGENT_OVERRIDE = 'Browser 1.0'
+
+PROBLEM_GENRE_MATCH = {
+    'genre': ('unknown',),
+    'rft.genre': ('unknown',),
+}
+
+PROBLEM_GENRE_REPLACE_MAP = {
+    'Article': 'article',
+    'Book': 'book',
+    'Book Chapter': 'bookchapter',
+    'Book Item': 'bookitem',
+    'Conference': 'conference',
+    'Dissertation': 'dissertation',
+    'Journal': 'journal',
+    'PrePrint': 'preprint',
+    'Proceeding': 'proceeding',
+    'Thesis': 'thesis',
+}
