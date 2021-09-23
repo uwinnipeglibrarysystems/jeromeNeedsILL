@@ -23,3 +23,7 @@
   <tr><td>{{ param.key }}</td><td>{{ param.value }}</td></tr>
   {% endfor %}
 </table>
+
+{% if error %}
+<strong>error:</strong> {{ error }}
+{% endif %}

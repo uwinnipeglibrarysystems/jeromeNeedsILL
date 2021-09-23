@@ -1,0 +1,33 @@
+<p>
+You're reached the interlibrary loan portal (ILL).
+</p>
+
+<p>
+  The type of item you are requesting for interlibrary loan is unknown.
+  Please select an item type to continue.
+</p>
+
+<p>After that, you can click "Make ILL request" to proceed and you'll be asked to login to the library and approve access to your patron profile.</p>
+
+<form metod="POST" enctype="application/x-www-form-urlencoded"
+      action="{{ targeturl }}">
+
+  <div>
+  <label for="">Item type:</label>
+  <select name="{{ genrefieldname }}">
+    <option value="{{ genrenotselectedvalue }}"
+	    selected>Please select an item type</option>
+    {% for display_name, field_name in genreremap %}
+    <option value="{{ field_name }}">{{ display_name  }}</option>
+    {% endfor %}
+  </select>
+
+  
+  {% for key, value in paramlist %}
+  <input type="hidden" name="{{ key }}" value="{{ value }}"></input>
+  {% endfor %}
+  </div>
+  <div>
+  <input type="submit" value="Make ILL request"></input>
+  </div>
+</form>

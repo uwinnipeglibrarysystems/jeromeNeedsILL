@@ -47,6 +47,11 @@ Don't commit secretkey.py and to revision control or sitesettings.py if it conta
 
 will initialize your development database (sqllite)
 
+`$ ./manage.py createcachetable`
+
+will create tables in your database for caching OCLC WMS profiles. In production
+you might want to use a different caching behavior by overriding CACHES in sitesettings.py .
+
 `$ ./manage.py runserver`
 
 runs a development web server.

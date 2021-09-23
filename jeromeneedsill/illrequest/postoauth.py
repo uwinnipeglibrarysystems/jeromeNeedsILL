@@ -1,11 +1,18 @@
 from urllib.parse import urlencode
+from uuid import uuid4
+
 from django.shortcuts import render
+from django.core.cache import cache
+from django.conf import settings
 
 from jeromeneedsill.oclcwmsapis import (
     OCLCApiFail,
     get_oclc_access_token,
     get_oclc_wms_simplified_patron_profile,
     )
+
+from .relaisill import refer_profile_and_request_to_relais
+from .rendermanualsaveprofile import render_post_oauth_manual_save_profile
 
 from .models import illrequestbase, openurlrequest, illmanualrequester
 
@@ -49,17 +56,41 @@ def post_oauth(request):
         except OCLCApiFail as e:
             return oauth_error_w_known_state(request, illrbase)
 
-        requester = illmanualrequester(
-            request=illrbase,
-            requester_name=patron_profile['name'],
-            email=patron_profile['email'],
-            barcode=patron_profile['barcode'] )
-        requester.save()
+        if ( hasattr(settings, 'RELAIS_REFER_PROFILE_AND_REQUEST_TO_RELAIS')
+             and
+             settings.RELAIS_REFER_PROFILE_AND_REQUEST_TO_RELAIS ):
 
-        params = openurlrequest.objects.filter(request=illrbase)
+            # if we're caching the patron profile so as to respond to
+            # /nciplookupuser/ after providing relais with a random UUID
+            if (hasattr(settings,
+                        'RELAIS_REQUEST_RELAIS_AID_W_CACHED_PROFILE_UUID') and
+                settings.RELAIS_REQUEST_RELAIS_AID_W_CACHED_PROFILE_UUID and
+                not settings.RELAIS_REQUEST_RELAID_AID_W_BARCODE):
 
-        return render(
-            request, 'ill_success_with_patron_details.html',
-            {'patron_profile': patron_profile,
-             'params': params,
-            } )
+                # cache the patron profile with a random (type 4) UUID
+                # so it can be retrieved by Relais calling /nciplookupuser/
+                profile_uuid = str(uuid4())
+                cache.set(profile_uuid, patron_profile)
+
+                return refer_profile_and_request_to_relais(
+                    request, profile_uuid, illrbase, patron_profile)
+
+            # of, if we're providing Relais a bacode because we are having it
+            # ask some other NCIP server or rely on profiles already there
+            elif (hasattr(settings, 'RELAIS_REQUEST_RELAID_AID_W_BARCODE')
+                  and settings.RELAIS_REQUEST_RELAID_AID_W_BARCODE and
+                  not settings.RELAIS_REQUEST_RELAIS_AID_W_CACHED_PROFILE_UUID
+            ):
+                return refer_profile_and_request_to_relais(
+                    request, patron_profile['barcode'],
+                    illrbase, patron_profile)
+            else:
+                raise Exception(
+                    "settings misconfiguration, one and only one of "
+                    "RELAIS_REQUEST_RELAIS_AID_W_CACHED_PROFILE_UUID "
+                    "and RELAIS_REQUEST_RELAID_AID_W_BARCODE must be set "
+                    "when RELAIS_REFER_PROFILE_AND_REQUEST_TO_RELAIS is enabled"
+                    )
+        else:
+            return render_post_oauth_manual_save_profile(
+                request, illrbase, patron_profile)

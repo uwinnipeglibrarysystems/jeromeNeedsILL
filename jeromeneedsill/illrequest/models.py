@@ -26,3 +26,13 @@ class openurlrequest(models.Model):
         indexes=[
             models.Index(fields=['request', 'key'])]
             
+class relaisrequestsmade(models.Model):
+    request = models.ForeignKey(illrequestbase, on_delete=models.CASCADE,
+                                blank=False, db_index=True)
+    date_created = models.DateTimeField(
+        auto_now_add=True, blank=False)
+    barcode = models.CharField(max_length=255, blank=False)
+    # length 60 to cover the extreme case in ipv6, of an IPv4 mapped IPv6
+    # address with a 15 character scope or zone after it (Linux max)
+    # https://stackoverflow.com/questions/166132/maximum-length-of-the-textual-representation-of-an-ipv6-address
+    ip = models.CharField(max_length=60, blank=False)

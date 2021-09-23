@@ -126,6 +126,17 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'wms_profile_cache',
+        'TIMEOUT': 60*30, # 30 minutes
+        'OPTIONS': {
+            'MAX_ENTRIES': 100000
+        }
+    }
+}
+
 # 128807 is the OCLC test institution
 # production installations should have a different DJANGO_SETTINGS_MODULE
 # with their own institution id specified

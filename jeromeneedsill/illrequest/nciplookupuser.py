@@ -2,6 +2,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.conf import settings
 from django.http import HttpResponse
+from django.core.cache import cache
 
 from jeromeneedsill.nciplookupuser import (
     extract_user_identifier_from_ncip_lookup_user_XML,
@@ -67,7 +68,22 @@ def ncip_lookup_user(request):
     # them in the response on that basis, not just automatically as is happening
     # below
 
-    if user_ident == TEST_USER_IDENT:
+    patron_profile = cache.get(user_ident)
+    if patron_profile!=None: # if we found a UUID identified profile in cache
+        return http_lookup_user_response_w_settings(
+            user_identifier=patron_profile['barcode'],
+            barcode=patron_profile['barcode'],
+            given_name=patron_profile['givenName'],
+            surname=patron_profile['familyName'],
+            email=patron_profile['email'],
+
+            # FIXME, the privilege_profile should be be based on aspects of
+            # patron type in the WMS response and probably the type mapping
+            # should be defined in the django settings configuration
+            privilege_profile="Student",
+            )
+
+    elif user_ident == TEST_USER_IDENT:
         return http_lookup_user_response_w_settings(
             privilege_profile="Student",
             user_identifier=user_ident,

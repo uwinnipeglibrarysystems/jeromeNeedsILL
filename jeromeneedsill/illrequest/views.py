@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import illrequestbase, openurlrequest
 
 from .postoauth import post_oauth
+from .genrefix import param_list_has_genre_problem, ask_for_genre_problem_fix
 
 # FIXME this should really be loaded from a configurable django app, so other
 # OAuth apis can be used other than oclc
@@ -55,15 +56,20 @@ def openurl_linkresolver(request):
     # FIXME, instead of hard coding '/ill/requestlogin' there is django
     # way to identify this apps url by name, so the url can change
     # but the name stay the same
-    url_encoded_ill_request = '/ill/requestlogin?' + urlencode( [
+    target_url = '/ill/requestlogin'
+    paramlist = [
         (key, value)
         for key, value_list in params.lists()
         for value in value_list
-            ] )
+    ]
 
-    return render(
-        request, 'linkresolverfront.html',
-        {'ill_request_url':url_encoded_ill_request} )
+    if param_list_has_genre_problem(paramlist):
+        return ask_for_genre_problem_fix(request, target_url, paramlist)
+    else:
+        url_encoded_ill_request = target_url + '?' + urlencode(paramlist)
+        return render(
+            request, 'linkresolverfront.html',
+            {'ill_request_url':url_encoded_ill_request} )
 
 def openurl_requestlog_and_directtologin(request):
     if request.method == 'POST':
@@ -73,12 +79,30 @@ def openurl_requestlog_and_directtologin(request):
     else:
         raise Exception("request method other than GET/POST")
 
+    paramlist = [
+        (key, value)
+        for key, value_list in params.lists()
+        for value in value_list
+    ]
+
+    # check if the user had been sent to genrefix.html and didn't
+    # select a new item genre
+    #
+    # if so, send them back
+    if param_list_has_genre_problem(paramlist):
+        # FIXME, instead of hard coding '/linkresolver' there is django
+        # way to identify this apps url by name, so the url can change
+        # but the name stay the same
+        linkresolver_url = '/linkresolver'
+        return redirect(
+            linkresolver_url + '?' + urlencode(paramlist)
+            )
+
     request_base = illrequestbase()
     request_base.save()
-    for key, value_list in params.lists():
-        for value in value_list:
-            ourlr = openurlrequest(request=request_base, key=key, value=value)
-            ourlr.save()
+    for key, value in paramlist:
+        ourlr = openurlrequest(request=request_base, key=key, value=value)
+        ourlr.save()
 
     return redirect(
         construct_oclc_oauth_url(
