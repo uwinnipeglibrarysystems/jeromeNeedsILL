@@ -13,8 +13,8 @@ You're reached the interlibrary loan portal (ILL).
       action="{{ targeturl }}">
 
   <div>
-  <label for="">Item type:</label>
-  <select name="{{ genrefieldname }}">
+  <label for="genreselect">Item type:</label>
+  <select name="{{ genrefieldname }}" id="genreselect">
     <option value="{{ genrenotselectedvalue }}"
 	    selected>Please select an item type</option>
     {% for display_name, field_name in genreremap %}
