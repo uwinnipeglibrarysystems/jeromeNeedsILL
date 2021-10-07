@@ -7,6 +7,7 @@ This is a web application which:
  2) Asks the user if they would like to place an ill request
  3) Authenticates the user against OCLC OAuth api
  4) Fetches a user profile with OCLC SCIM /Me API and stores name, email and barcode in the database connected to the ILL request
+ 5) Optionally sends the user to Relais Portal to place their ILL request there, a process which involves: i) requesting an authentication id (aid), ii) potentially providing the patron profile to Relais through the NCIP Lookup User operation, iii) redirecting the patron to Relais Portal with the aid
 
 Code here was developed by staff of the systems team at the University of Winnipeg Library. Free software licensing is pending.
 
@@ -15,8 +16,6 @@ This application is in early release. It's not even in production yet at the Uni
 Note that production deployment instructions are not included at this time. Like all Django apps, if you are going to deploy to production, cryptographic secrets should not be found in source code files and should be passed on to settings.py by way of environment variables that the production web server passes on.
 
 Releases will be tagged.
-
-Planned as soon as possible, support for Relais APIs so that user profiles and ILL requests can land there for direct handling by ILL staff and only pass through this Django web app. The codebase mainline contains some initial work in progress for the NCIP Lookup User operation, but this support is not yet useful or integrated with the workflow of the rest of the application.
 
 This project code uses [Django](https://djangoproject.com), 3.2 series, the current long term support (LTS) release.
 
@@ -40,9 +39,13 @@ Note, in deployment ILLREQUEST_OCLC_SCIM_SECRET should not be in a file at all b
 
 Don't commit secretkey.py and to revision control or sitesettings.py if it contains ILLREQUEST_OCLC_SCIM_SECRET .
 
+There are many settings possible through settings.py or sitesettings.py . Many are listed in jeromeneedsill/sitesettings.py.example and jeromeneedsill/sitesettings.py.production.example, though more documentation is still called for.
+
+Once you have a satisfactory configuration in secretkey.py, settings.py and sitesetting.py, you can run:
+
 `$ ./manage.py migrate`
 
-will initialize your development database (sqllite)
+to initialize your development database (sqllite)
 
 `$ ./manage.py createcachetable`
 
