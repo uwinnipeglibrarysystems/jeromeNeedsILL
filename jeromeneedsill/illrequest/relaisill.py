@@ -3,24 +3,27 @@ from urllib.parse import urlencode, urljoin
 from requests.exceptions import RequestException
 
 from django.conf import settings
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
+
+from jeromeneedsill.ipmatchrules import get_rule_if_ip_matches
 
 from jeromeneedsill.relaisill import request_relais_authorization_id
 from .rendermanualsaveprofile import render_post_oauth_manual_save_profile
-from .models import openurlrequest, relaisrequestsmade
+from .models import \
+    openurlrequest, relaisrequestsmade, illrequestdiscoveredipaddress
+from .util import get_client_ip_addr_from_request
+
+def handle_ip_address_change_w_warning_page(request, illrbase):
+    return render(
+        request, 'ip_address_change.html',
+        {"resubmit_link": "/ill/requestlogin?state=%s" % str(illrbase.id) })
 
 def refer_profile_and_request_to_relais(
         request, profile_id, illrbase, patron_profile):
 
     patron_id = profile_id
 
-    # FIXME, REMOTE_ADDR may not be correct for all setups
-    # configuration logic should be added
-    if 'REMOTE_ADDR' not in request.META:
-        raise Exception(
-            "detection of patron ip address not available through "
-            "REMOTE_ADDR field in request.META, alternative needed")
-    patron_ip = request.META['REMOTE_ADDR']
+    patron_ip = get_client_ip_addr_from_request(request)
 
     # FIXME, more investigation required to ensure this is correct
     # in most setups, configuration logic may be required
@@ -42,6 +45,34 @@ def refer_profile_and_request_to_relais(
     if ( settings.DEBUG and
          hasattr(settings, 'RELAIS_DEBUG_PATRON_IP_OVERRIDE') ):
         patron_ip = settings.RELAIS_DEBUG_PATRON_IP_OVERRIDE
+    # if the ip address correction feature is enabled and the patron
+    # is a match
+    elif ( hasattr(settings, 'ILLREQUEST_IP_CORRECTION_RANGES') and
+           get_rule_if_ip_matches(
+               patron_ip, settings.ILLREQUEST_IP_CORRECTION_RANGES) ):
+        # then we should have a log of the ip address they're showing
+        # us and the outer one they will show Relais Portal
+        try:
+            # there might be multiple ip address logs (from re-sending the
+            # user through the process) so we use order_by, reverse
+            # and [0] to get the most recent one
+            request_ip_log = illrequestdiscoveredipaddress.objects.filter(
+                request=illrbase).order_by('date_created').reverse()[0]
+        except IndexError:
+            return handle_ip_address_change_w_warning_page(request, illrbase)
+
+        # check that the patron ip matching the rule still matches
+        # the one we logged
+        if request_ip_log.original_ip == patron_ip:
+            # if the patron ip is still a match, then use the logged
+            # override ip and we'll fall through to the code below
+            # that contacts Relais passing that on
+            patron_ip = request_ip_log.outside_ip
+        # if the patron ip has changed, then we don't know if the detected
+        # outside ip is even correct anymore, so we show the patron an
+        # error page to get their ip logged again
+        else:
+            return handle_ip_address_change_w_warning_page(request, illrbase)
 
     # development only feature, support for override of patron user-agent
     # though, if request.META['HTTP_USER_AGENT'] then most dev
