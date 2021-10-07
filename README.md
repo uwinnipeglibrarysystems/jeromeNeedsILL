@@ -1,7 +1,4 @@
-Jerome is considered the patron saint of librarians.
-
-https://en.wikipedia.org/wiki/Jerome
-https://www.luther.edu/library/about/history/40th/jerome/
+[Jerome](https://en.wikipedia.org/wiki/Jerome) is considered the [patron saint](https://www.luther.edu/library/about/history/40th/jerome/) of librarians.
 
 Perhaps he would have valued interlibrary loans as we do.
 
@@ -21,18 +18,18 @@ Releases will be tagged.
 
 Planned as soon as possible, support for Relais APIs so that user profiles and ILL requests can land there for direct handling by ILL staff and only pass through this Django web app. The codebase mainline contains some initial work in progress for the NCIP Lookup User operation, but this support is not yet useful or integrated with the workflow of the rest of the application.
 
-This project code uses Django (djangoproject.com), 3.2 series, the current long term support (LTS) release.
+This project code uses [Django](https://djangoproject.com), 3.2 series, the current long term support (LTS) release.
 
-The Django docs (https://docs.djangoproject.com/en/3.2/) cover what is involved in running a Django project.
+The [Django docs](https://docs.djangoproject.com/en/3.2/) cover what is involved in running a Django project.
 
-To run this code for development, you'll need Python 3.6 or later, a Django 3.2.x installation, python-requests (http://python-requests.org) and their dependencies.
+To run this code for development, you'll need Python 3.6 or later, a Django 3.2.x installation, [python-requests](https://docs.python-requests.org/) and their dependencies.
 
-You may find it convient to use the python venv (https://docs.python.org/3/library/venv.html) to contain these dependencies instead of installing them system wide. A venv will also typically include the pip3 too.
+You may find it convient to use the [python venv module](https://docs.python.org/3/library/venv.html) to contain these dependencies instead of installing them system wide. A venv will also typically include the pip3 too.
 
 Django 3.2 and python-requests are specified in the requirements.txt file. You can install both of those requirements and their dependencies with
 $ pip3 install -r requirements.txt
 
-One dependency of this project is not availble through requirements.txt, pip and PyPY (Python Package Index). This is https://github.com/uwinnipeglibrarysystems/oclchmac .  You'll need to make that available for this Django app manually by ensuring the oclcwskeyhmacsig.util and oclcwskeyhmacsig.hmacsig libraries are available in the python path.
+One dependency of this project is not availble through requirements.txt, pip and PyPY (Python Package Index). This is [oclchmac](https://github.com/uwinnipeglibrarysystems/oclchmac) .  You'll need to make that available for this Django app manually by ensuring the oclcwskeyhmacsig.util and oclcwskeyhmacsig.hmacsig libraries are available in the python path.
 
 The Django settings file jeromeneedsill/settings.py imports a development SECRET_KEY from jeromeneedsill/secretkey.py, so you'll have to create that file. jeromeneedsill/secretkey_template.py includes an example or can be run
 $ python3 jeromeneedsill/secretkey_template.py > jeromeneedsill/secretkey.py
