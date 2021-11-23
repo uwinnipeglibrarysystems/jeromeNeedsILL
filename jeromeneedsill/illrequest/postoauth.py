@@ -22,6 +22,24 @@ def oauth_error_w_known_state(request, illrbase):
         {'illrequestbase': illrbase,
          'illopenurlparams': openurlrequest.objects.filter(request=illrbase) })
 
+def ncip_cached_profile_setting_w_uuid():
+    return (
+        hasattr(settings,'RELAIS_REQUEST_RELAIS_AID_W_CACHED_PROFILE_UUID')
+        and
+        settings.RELAIS_REQUEST_RELAIS_AID_W_CACHED_PROFILE_UUID)
+
+def ncip_cached_profile_setting_w_barcode():
+    return (
+      hasattr(settings,'RELAIS_REQUEST_RELAIS_AID_W_CACHED_PROFILE_BARCODE')
+      and
+      settings.RELAIS_REQUEST_RELAIS_AID_W_CACHED_PROFILE_BARCODE)
+
+def ncip_cached_profile_setting_in_use():
+    cached_profile_uuid = ncip_cached_profile_setting_w_uuid()
+    cached_profile_barcode = ncip_cached_profile_setting_w_barcode()
+    return ( (cached_profile_uuid or cached_profile_barcode) and
+             not settings.RELAIS_REQUEST_RELAID_AID_W_BARCODE)
+
 def post_oauth(request):
     if 'state' in request.GET:
         try:
@@ -62,18 +80,19 @@ def post_oauth(request):
 
             # if we're caching the patron profile so as to respond to
             # /nciplookupuser/ after providing relais with a random UUID
-            if (hasattr(settings,
-                        'RELAIS_REQUEST_RELAIS_AID_W_CACHED_PROFILE_UUID') and
-                settings.RELAIS_REQUEST_RELAIS_AID_W_CACHED_PROFILE_UUID and
-                not settings.RELAIS_REQUEST_RELAID_AID_W_BARCODE):
-
+            if ncip_cached_profile_setting_in_use():
                 # cache the patron profile with a random (type 4) UUID
                 # so it can be retrieved by Relais calling /nciplookupuser/
-                profile_uuid = str(uuid4())
-                cache.set(profile_uuid, patron_profile)
+                if ncip_cached_profile_setting_w_uuid():
+                    profile_ident = str(uuid4())
+                elif ncip_cached_profile_setting_w_barcode():
+                    profile_ident = patron_profile['barcode']
+                else: # one of the above will always apply
+                    assert(False)
+                cache.set(profile_ident, patron_profile)
 
                 return refer_profile_and_request_to_relais(
-                    request, profile_uuid, illrbase, patron_profile)
+                    request, profile_ident, illrbase, patron_profile)
 
             # of, if we're providing Relais a bacode because we are having it
             # ask some other NCIP server or rely on profiles already there
