@@ -74,6 +74,11 @@ def post_oauth(request):
         except OCLCApiFail as e:
             return oauth_error_w_known_state(request, illrbase)
 
+        if ( hasattr(settings, 'REJECT_ILL_PATRON_TYPES') and
+             patron_profile['borrowerCategory'] in settings.REJECT_ILL_PATRON_TYPES ):
+             return render( request, 'borrowingdenied.html',
+                            {'patrontype': patron_profile['borrowerCategory']} )
+
         if ( hasattr(settings, 'RELAIS_REFER_PROFILE_AND_REQUEST_TO_RELAIS')
              and
              settings.RELAIS_REFER_PROFILE_AND_REQUEST_TO_RELAIS ):
