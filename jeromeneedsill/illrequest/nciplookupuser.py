@@ -121,5 +121,12 @@ def ncip_lookup_user(request):
             email="test@localdomain",
             barcode="12345671234567",
         )
+    elif ( hasattr(settings, 'NCIP_LOOKUP_USER_DEBUG_CACHE')
+           and user_ident in settings.NCIP_LOOKUP_USER_DEBUG_CACHE ):
+        # reminder, ** is the python operator for taking a dictionary and
+        # using it as the basis to fill in arguments by name in a function
+        # call
+        return http_lookup_user_response_w_settings(
+            **settings.NCIP_LOOKUP_USER_DEBUG_CACHE[user_ident] )
     else:
         return http_lookup_user_response_unknown_user_error_w_settings()
