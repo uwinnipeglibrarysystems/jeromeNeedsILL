@@ -35,6 +35,7 @@ from .models import \
 from .postoauth import post_oauth
 from .genrefix import param_list_has_genre_problem, ask_for_genre_problem_fix
 from .util import get_client_ip_addr_from_request
+from .vacation import ill_vacation_in_effect
 
 # FIXME this should really be loaded from a configurable django app, so other
 # OAuth apis can be used other than oclc
@@ -84,6 +85,11 @@ def create_django_redirect_to_oclc_oauth_for_request_state_uuid(request_uuid):
 
 @csrf_exempt
 def openurl_linkresolver(request):
+    if ill_vacation_in_effect():
+        return render(
+            request, 'vacation.html',
+            {'vacation_msg': settings.ILL_VACATION_MSG} )
+
     if request.method == 'POST':
         params = request.POST
     elif request.method == 'GET':
